@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belpearl — Bel Pearl maar even</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #F1E6D6;
+    --paper-2: #E9DAC2;
+    --ink: #2B2318;
+    --ink-soft: #5B5140;
+    --rust: #3E5233;
+    --rust-dark: #2A3823;
+    --sage: #69754F;
+    --line: #D3C2A0;
+    --cream-card: #FBF6EC;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    color:var(--ink);
+    margin:0;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--rust-dark);
+  }
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--rust);
+    color:var(--cream-card);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:0.98rem;
+    padding:14px 26px;
+    border-radius:3px;
+    text-decoration:none;
+    border:1px solid var(--rust-dark);
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover{background:var(--rust-dark); transform:translateY(-1px);}
+  .btn:focus-visible{outline:3px solid var(--sage); outline-offset:2px;}
+  .btn.ghost{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--ink);
+  }
+  .btn.ghost:hover{background:var(--ink); color:var(--paper);}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(241,230,214,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:1080px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Newsreader', serif;
+    font-size:1.3rem;
+    font-style:italic;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{width:8px; height:8px; border-radius:50%; background:var(--rust); display:inline-block;}
+  nav.links{display:flex; gap:28px; align-items:center;}
+  nav.links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    border-bottom:1px solid transparent;
+  }
+  nav.links a:hover{color:var(--ink); border-bottom-color:var(--rust);}
+  .nav-cta{display:none;}
+  @media(min-width:760px){.nav-cta{display:inline-flex;}}
+  .menu-toggle{display:none; background:none; border:none; font-family:'JetBrains Mono',monospace; font-size:0.85rem; cursor:pointer; color:var(--ink);}
+  @media(max-width:759px){
+    nav.links{display:none;}
+    .menu-toggle{display:block;}
+    nav.links.open{
+      display:flex; flex-direction:column; position:absolute; top:100%; left:0; right:0;
+      background:var(--paper); padding:18px 28px 26px; border-bottom:1px solid var(--line); gap:16px;
+    }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:96px 0 84px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{position:relative; z-index:2;}
+  .hero-grid{display:grid; grid-template-columns:1.3fr 0.9fr; gap:56px; align-items:center;}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;}}
+  .hero h1{
+    font-size:clamp(2.6rem, 5.6vw, 4.4rem);
+    line-height:1.04;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 em{font-style:italic; color:var(--rust);}
+  .hero p.lede{
+    margin-top:22px;
+    font-size:1.14rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .hero-actions{margin-top:34px; display:flex; gap:16px; flex-wrap:wrap;}
+
+  /* rotary dial signature graphic */
+  .dial-wrap{display:flex; justify-content:center;}
+  .dial-photo{
+    width:min(360px, 92%);
+    aspect-ratio:4/5;
+    position:relative;
+    border-radius:4px;
+    overflow:hidden;
+    box-shadow:0 0 0 1px var(--line);
+    animation:photo-in 1s cubic-bezier(.2,.8,.2,1) both;
+  }
+  .dial-photo::after{
+    content:"";
+    position:absolute; inset:0;
+    border-radius:4px;
+    box-shadow:0 0 0 10px var(--paper), 0 0 0 11px var(--line);
+    pointer-events:none;
+  }
+  .dial-photo img{width:100%; height:100%; object-fit:cover; display:block;}
+  @keyframes photo-in{
+    from{transform:scale(0.96); opacity:0;}
+    to{transform:scale(1); opacity:1;}
+  }
+  .pulse{
+    fill:none; stroke:var(--rust); stroke-width:1.4; opacity:0.55;
+    animation:pulse-ring 2.8s ease-out infinite;
+    transform-origin:center;
+  }
+  .pulse.delay{animation-delay:1.4s;}
+  @keyframes pulse-ring{
+    0%{transform:scale(0.94); opacity:0.6;}
+    100%{transform:scale(1.24); opacity:0;}
+  }
+
+  /* ---------- section shell ---------- */
+  section{padding:76px 0;}
+  .section-head{max-width:640px; margin-bottom:44px;}
+  .section-head h2{font-size:clamp(1.8rem, 3vw, 2.4rem); margin-top:10px;}
+  .divider{border:none; border-top:1px solid var(--line); margin:0;}
+
+  /* ---------- waarom ---------- */
+  .why{background:var(--paper-2);}
+  .why-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
+  @media(max-width:760px){.why-grid{grid-template-columns:1fr;}}
+  .why p{font-size:1.06rem; color:var(--ink-soft); max-width:52ch;}
+  .why strong{color:var(--ink);}
+
+  /* ---------- hoe werkt het ---------- */
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:36px; margin-top:8px;}
+  @media(max-width:760px){.steps{grid-template-columns:1fr;}}
+  .step{border-top:2px solid var(--rust); padding-top:16px;}
+  .step .num{font-family:'JetBrains Mono', monospace; font-size:0.85rem; color:var(--rust-dark);}
+  .step h3{font-size:1.2rem; margin-top:10px;}
+  .step p{color:var(--ink-soft); margin-top:8px; font-size:0.98rem;}
+
+  /* ---------- consults ---------- */
+  .consults{background:var(--paper-2);}
+  .consult-list{display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line);}
+  .consult{
+    display:grid; grid-template-columns:140px 1fr 220px; gap:32px;
+    padding:36px 0; border-bottom:1px solid var(--line);
+    align-items:start;
+  }
+  @media(max-width:800px){.consult{grid-template-columns:1fr;}}
+  .consult .len{font-family:'Newsreader', serif; font-size:2.1rem; font-style:italic; color:var(--rust);}
+  .consult .len small{display:block; font-family:'JetBrains Mono',monospace; font-style:normal; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); margin-top:4px;}
+  .consult h3{font-size:1.28rem; margin-bottom:8px;}
+  .consult p{color:var(--ink-soft); font-size:0.98rem; max-width:56ch;}
+  .consult ul{margin:14px 0 0; padding-left:18px; color:var(--ink-soft); font-size:0.94rem;}
+  .consult ul li{margin-bottom:4px;}
+  .consult .price-col{text-align:left;}
+  @media(min-width:800px){.consult .price-col{text-align:right;}}
+  .consult .price{font-family:'Newsreader', serif; font-size:1.6rem;}
+  .consult .rush{font-size:0.82rem; color:var(--ink-soft); margin-top:6px;}
+  .consult .btn{margin-top:14px;}
+
+  .referral-box{
+    margin-top:36px;
+    padding:28px 30px;
+    background:var(--cream-card);
+    border:1px solid var(--line);
+    border-left:3px solid var(--rust);
+    border-radius:3px;
+  }
+  .referral-box .eyebrow{margin-bottom:8px; display:block;}
+  .referral-box h3{font-size:1.2rem; margin-bottom:10px;}
+  .referral-box p{color:var(--ink-soft); font-size:0.98rem; max-width:60ch; margin-bottom:16px;}
+
+  /* message-pad note (testimonials + signature element) */
+  .note{
+    background:var(--cream-card);
+    border:1px solid var(--line);
+    border-top:6px dashed var(--rust);
+    padding:20px 22px 18px;
+    position:relative;
+    box-shadow:0 1px 0 rgba(43,35,24,0.04);
+    margin-top:20px;
+  }
+  .note .tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.66rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--rust-dark);
+    display:block;
+    margin-bottom:10px;
+  }
+  .note p{
+    font-family:'Newsreader', serif;
+    font-style:italic;
+    font-size:1.06rem;
+    color:var(--ink);
+    margin:0;
+  }
+  .note .from{
+    display:block;
+    margin-top:14px;
+    font-family:'Work Sans', sans-serif;
+    font-style:normal;
+    font-weight:600;
+    font-size:0.88rem;
+    color:var(--ink-soft);
+  }
+  .note .from::before{content:"— ";}
+
+  /* ---------- over mij ---------- */
+  .about{padding-top:76px;}
+  .about-grid{display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px; align-items:start;}
+  @media(max-width:800px){.about-grid{grid-template-columns:1fr;}}
+  .about-photo{
+    aspect-ratio:4/5;
+    border-radius:3px;
+    overflow:hidden;
+    position:relative;
+    display:flex; align-items:flex-end;
+    box-shadow:0 1px 0 rgba(43,35,24,0.08);
+  }
+  .about-photo img{
+    width:100%; height:100%; object-fit:cover; object-position:50% 22%;
+    display:block;
+  }
+  .about-photo span{
+    position:relative; z-index:2;
+    font-family:'Newsreader', serif; font-style:italic; font-size:1.1rem;
+    color:#F1E6D6; padding:22px;
+    background:linear-gradient(to top, rgba(43,35,24,0.62), rgba(43,35,24,0));
+    width:100%;
+  }
+  .about h2{font-size:clamp(1.9rem, 3vw, 2.6rem);}
+  .about p{color:var(--ink-soft); font-size:1.05rem; margin-top:16px; max-width:58ch;}
+  .why-belpearl{
+    margin-top:28px; padding:22px 24px;
+    background:var(--paper-2); border-left:3px solid var(--sage);
+  }
+  .why-belpearl p{margin:0; font-style:italic; font-family:'Newsreader', serif; font-size:1.12rem; color:var(--ink);}
+
+  /* ---------- testimonials wall ---------- */
+  .wall-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:24px;}
+  @media(max-width:760px){.wall-grid{grid-template-columns:1fr;}}
+
+  /* ---------- rekenen op ---------- */
+  .trust{background:var(--ink); color:var(--paper);}
+  .trust h2{color:var(--paper);}
+  .trust-list{list-style:none; padding:0; margin:36px 0 0; display:grid; grid-template-columns:repeat(2,1fr); gap:18px 40px;}
+  @media(max-width:700px){.trust-list{grid-template-columns:1fr;}}
+  .trust-list li{
+    padding-left:26px; position:relative; color:#DCD2BE; font-size:1rem;
+  }
+  .trust-list li::before{
+    content:"–"; position:absolute; left:0; color:var(--rust);
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  /* ---------- notice ---------- */
+  .notice{
+    background:var(--cream-card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--sage);
+    border-radius:3px;
+    padding:32px 34px;
+  }
+  .notice h3{
+    font-size:1.3rem;
+    font-weight:500;
+    margin-top:10px;
+    max-width:52ch;
+  }
+  .notice ul{
+    list-style:none;
+    padding:0;
+    margin:22px 0 0;
+    display:grid;
+    gap:12px;
+  }
+  .notice ul li{
+    color:var(--ink-soft);
+    font-size:0.98rem;
+    padding-left:20px;
+    position:relative;
+  }
+  .notice ul li::before{
+    content:"–";
+    position:absolute; left:0;
+    color:var(--sage);
+    font-family:'JetBrains Mono', monospace;
+  }
+  .notice ul li strong{color:var(--ink);}
+
+  /* ---------- faq ---------- */
+  .faq-list{border-top:1px solid var(--line);}
+  details{border-bottom:1px solid var(--line); padding:20px 0;}
+  summary{
+    cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;
+    font-family:'Newsreader', serif; font-size:1.15rem;
+  }
+  summary::-webkit-details-marker{display:none;}
+  summary .plus{font-family:'JetBrains Mono', monospace; color:var(--rust); font-size:1.3rem; transition:transform 0.2s ease;}
+  details[open] summary .plus{transform:rotate(45deg);}
+  details p{color:var(--ink-soft); margin:14px 0 0; max-width:64ch; font-size:0.98rem;}
+
+  /* ---------- closing cta ---------- */
+  .closing{
+    background:var(--rust); color:var(--cream-card); text-align:center;
+    padding:96px 0;
+  }
+  .closing h2{color:var(--cream-card); font-size:clamp(2rem,4vw,2.9rem);}
+  .closing p{margin-top:14px; color:#DDE7CE; font-size:1.08rem;}
+  .closing .btn{margin-top:30px; background:var(--cream-card); color:var(--rust-dark); border-color:var(--cream-card);}
+  .closing .btn:hover{background:#fff;}
+
+  footer{
+    background:var(--ink); color:#B9AF98; padding:34px 0; font-size:0.86rem;
+  }
+  footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="#top" aria-label="Belpearl home"><span class="dot"></span>Belpearl</a>
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <nav class="links" id="navLinks">
+      <a href="#over-mij">Over mij</a>
+      <a href="#consults">Consults</a>
+      <a href="#faq">Veelgestelde vragen</a>
+      <a class="btn nav-cta" href="https://calendly.com/belpearl">Plan een gesprek</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Scheiding · co-ouderschap · Veilig Thuis · relaties</p>
+        <h1>Bel Pearl<br><em>maar even.</em></h1>
+        <p class="lede">Een scheiding, gedoe rond co-ouderschap, een melding bij Veilig Thuis, twijfels over je relatie — soms wil je niet eerst een heel traject in, maar gewoon één verhelderend gesprek. Kies je moment, plan direct in en bel binnen een paar dagen met Pearl.</p>
+        <div class="hero-actions">
+          <a class="btn" href="https://calendly.com/belpearl">Plan direct je consult</a>
+          <a class="btn ghost" href="#consults">Bekijk de opties</a>
+        </div>
+      </div>
+      <div class="dial-wrap" aria-hidden="true">
+        <div class="dial-photo">
+          <img src="hero-telefoon.png" alt="Vintage draaischijftelefoon op een marmeren ondergrond">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- WAAROM -->
+  <section class="why">
+    <div class="wrap why-grid">
+      <div class="section-head" style="margin-bottom:0;">
+        <p class="eyebrow">Waarom Belpearl</p>
+        <h2>Niet elk vastlopen vraagt om een heel traject.</h2>
+      </div>
+      <div>
+        <p>Je hoeft niet met alles te wachten tot je hebt uitgezocht bij wie je moet zijn. Soms heb je gewoon iemand nodig die meeluistert, meedenkt en je op weg helpt — <strong>snel, persoonlijk en zonder lange wachtlijst.</strong> Door de vragen die ik stel, breng je zelf je gedachten op orde, zodat je weer helder ziet wat je volgende stap kan zijn.</p>
+        <p>Belpearl is er voor dat ene moment waarop je vastloopt en zelf weer een volgende stap wilt zetten.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOE HET WERKT -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Hoe het werkt</p>
+        <h2>Drie stappen naar helderheid</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>Kies je moment</h3>
+          <p>20, 35 of 55 minuten — jij bepaalt hoeveel ruimte je nodig hebt.</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>Plan direct in</h3>
+          <p>Boek zelf een tijdstip via de agenda en betaal meteen veilig via iDEAL.</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>Bel met Pearl</h3>
+          <p>Na betaling ontvang je het telefoonnummer waarop je gebeld wordt — rechtstreeks, persoonlijk, geen wachtrij.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSULTS -->
+  <section class="consults" id="consults">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">De drie consults</p>
+        <h2>Kies het gesprek dat bij je situatie past</h2>
+      </div>
+
+      <div class="consult-list">
+
+        <div class="consult">
+          <div class="len">20<small>minuten</small></div>
+          <div>
+            <h3>Snel antwoord op één vraag</h3>
+            <p>Voor als je één concrete vraag hebt en snel duidelijkheid wilt. Bijvoorbeeld over een eerste stap na een scheiding, hoe je iets rond co-ouderschap aanpakt, of wat je moet doen bij een melding van Veilig Thuis.</p>
+            <ul>
+              <li>Eén specifieke vraag</li>
+              <li>Een korte check: "klopt wat ik denk?"</li>
+              <li>Een eerste duw in de goede richting</li>
+            </ul>
+            <div class="note">
+              <span class="tag">Voor jou genoteerd</span>
+              <p>"Fijn dat er zo snel iemand met je mee kan denken. Ik kon de volgende dag al een afspraak inplannen. Dat is in mijn ogen goud waard."</p>
+              <span class="from">Nova</span>
+            </div>
+          </div>
+          <div class="price-col">
+            <div class="price">€75</div>
+            <div class="rush">Vandaag nog bellen? €95 (incl. €20 spoedtoeslag)</div>
+            <a class="btn" href="https://calendly.com/belpearl">Plan 20 min consult</a>
+          </div>
+        </div>
+
+        <div class="consult">
+          <div class="len">35<small>minuten</small></div>
+          <div>
+            <h3>Je situatie in kaart brengen</h3>
+            <p>Voor als je situatie iets meer om het lijf heeft en je behoefte hebt aan overzicht. Jij vertelt, ik luister, vraag door en vat samen — zo orden je zelf je gedachten en zie je weer helder wat je volgende stap kan zijn.</p>
+            <ul>
+              <li>Een situatie met meerdere kanten</li>
+              <li>Overzicht krijgen voordat je een beslissing neemt</li>
+              <li>Ruimte om je verhaal te doen en gericht advies te krijgen</li>
+            </ul>
+            <div class="note">
+              <span class="tag">Voor jou genoteerd</span>
+              <p>"Ze wees ons erop dat we elkaar nog steeds behandelden als partners in plaats van samen opvoedende ouders. Dat maakte het veel makkelijker om dingen van elkaar te accepteren."</p>
+              <span class="from">Aziz</span>
+            </div>
+          </div>
+          <div class="price-col">
+            <div class="price">€100</div>
+            <div class="rush">Vandaag nog bellen? €120 (incl. €20 spoedtoeslag)</div>
+            <a class="btn" href="https://calendly.com/belpearl">Plan 35 min consult</a>
+          </div>
+        </div>
+
+        <div class="consult">
+          <div class="len">55<small>minuten</small></div>
+          <div>
+            <h3>Uitgebreide bespreking van je situatie</h3>
+            <p>Voor als je situatie complex is of je echt de tijd wilt nemen om alles door te spreken. We werken toe naar een duidelijk beeld van waar je staat en wat je te doen staat — ik stel de vragen die niemand durft te stellen.</p>
+            <ul>
+              <li>Een situatie met veel factoren of geschiedenis</li>
+              <li>Grondig advies over een lastige keuze</li>
+              <li>Alle ruimte om je verhaal volledig te doen</li>
+            </ul>
+            <div class="note">
+              <span class="tag">Voor jou genoteerd</span>
+              <p>"Doordat Pearl scherpe vragen stelde werd me snel duidelijk dat mijn advocaat niet bij me paste. Dat bracht helderheid, waardoor ik weer verder kon op de goede weg."</p>
+              <span class="from">Robert</span>
+            </div>
+          </div>
+          <div class="price-col">
+            <div class="price">€150</div>
+            <div class="rush">Vandaag nog bellen? €170 (incl. €20 spoedtoeslag)</div>
+            <a class="btn" href="https://calendly.com/belpearl">Plan 55 min consult</a>
+          </div>
+        </div>
+
+      </div>
+      <p style="margin-top:28px; color:var(--ink-soft); font-size:0.95rem;">Twijfel je welk consult bij je past? Begin gerust met het 20 min consult — merk je dat je meer tijd nodig hebt, dan plan je alsnog een langer gesprek. Liever niet bellen? Het gesprek kan ook via e-mail of spraakbericht.</p>
+
+      <div class="referral-box">
+        <span class="eyebrow">Twijfel je al langer?</span>
+        <h3>Blijven of Gaan, de Scheidingscheck</h3>
+        <p>Wil je dieper gaan dan één gesprek? Blijven of Gaan begint bij een uitgebreide vragenlijst — bijna 100 vragen over wat er in jouw afweging meespeelt — gevolgd door een eenmalige call van 55 minuten waarin we samen door je antwoorden heen gaan. Voor wie echt tot de kern wil komen van de vraag: blijven of gaan.</p>
+        <a class="btn ghost" href="https://blijvenofgaan.nl">Bekijk Blijven of Gaan</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OVER MIJ -->
+  <section class="about" id="over-mij">
+    <div class="wrap about-grid">
+      <div class="about-photo">
+        <img src="pearl-foto.jpg" alt="Portret van Pearl, leunend tegen een muur, glimlachend">
+        <span>Pearl —<br>mediator &amp; familietherapeut</span>
+      </div>
+      <div>
+        <p class="eyebrow">Over mij</p>
+        <h2>Hallo, ik ben Pearl</h2>
+        <p>Als mediator, haptonoom, familietherapeut, ouder en als mens help ik mensen die vastlopen in situaties rond scheiding, co-ouderschap, relaties of een melding bij Veilig Thuis. Niet met een lang traject, maar met een verhelderend gesprek waarin je snel weer verder kunt.</p>
+        <p>Ik luister en kijk met je mee — met de scherpte van iemand die afstand houdt en professioneel is, maar met de warmte en betrokkenheid alsof ik je zus ben. Als vakspeler weet ik wat er speelt in dit soort situaties, en help ik je zelf de antwoorden te vinden waar je nu niet uitkomt.</p>
+
+        <div class="note" style="max-width:52ch;">
+          <span class="tag">Voor jou genoteerd</span>
+          <p>"Pearl is zeer prettig om mee te bellen. Deskundig, niet bang om te zeggen waar het op staat. Ze zei precies wat ik niet wilde horen, maar dat was wel wat ik nodig had."</p>
+          <span class="from">Muriel</span>
+        </div>
+
+        <div class="why-belpearl">
+          <p>"Bel Pearl maar even" — die zin hoor ik vaak, en dat is precies wat ik wil zijn: iemand die je snel en persoonlijk kunt bereiken, op het moment dat je het nodig hebt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL WALL -->
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Wat anderen zeggen</p>
+        <h2>Berichtjes van eerdere gesprekken</h2>
+      </div>
+      <div class="wall-grid">
+        <div class="note">
+          <span class="tag">Voor jou genoteerd</span>
+          <p>"Pearl is zeer prettig om mee te bellen. Deskundig, niet bang om te zeggen waar het op staat. Ze zei precies wat ik niet wilde horen, maar dat was wel wat ik nodig had."</p>
+          <span class="from">Muriel</span>
+        </div>
+        <div class="note">
+          <span class="tag">Voor jou genoteerd</span>
+          <p>"Ik was verbaasd over haar scherpte en betrokkenheid. Ze legde linken die we zelf niet hadden gelegd."</p>
+          <span class="from">Aziz</span>
+        </div>
+        <div class="note">
+          <span class="tag">Voor jou genoteerd</span>
+          <p>"Ik wilde mijn gedachten ordenen over mijn scheiding. Ik kon de volgende dag al een afspraak inplannen. Dat is in mijn ogen goud waard."</p>
+          <span class="from">Nova</span>
+        </div>
+        <div class="note">
+          <span class="tag">Voor jou genoteerd</span>
+          <p>"Doordat Pearl scherpe vragen stelde werd me snel duidelijk dat mijn advocaat niet bij me paste. Dat bracht helderheid."</p>
+          <span class="from">Robert</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="trust">
+    <div class="wrap">
+      <p class="eyebrow" style="color:#A9BC97;">Waar je op kunt rekenen</p>
+      <h2>Duidelijk, vooraf, zonder verrassingen</h2>
+      <ul class="trust-list">
+        <li>Vertrouwelijk en zonder oordeel</li>
+        <li>Zelf direct een moment inplannen, geen heen-en-weer gemail</li>
+        <li>Veilig betalen via iDEAL, vooraf geregeld</li>
+        <li>Praktisch advies waar jij zelf mee verder kunt</li>
+        <li>Geen lang traject — je kiest zelf wat je nodig hebt</li>
+        <li>Gesprek per telefoon, e-mail of spraakbericht</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- WANNEER NIET BELLEN -->
+  <section>
+    <div class="wrap">
+      <div class="notice">
+        <p class="eyebrow" style="color:var(--sage);">Wanneer bel je beter niet</p>
+        <h3>Belpearl is bedoeld voor een kort, verhelderend gesprek — niet voor acute noodsituaties.</h3>
+        <ul>
+          <li>Is er direct gevaar? Bel <strong>112</strong>.</li>
+          <li>Zoek je een langdurig therapie- of mediationtraject? Dat bespreken we graag tijdens een consult, maar Belpearl vervangt zo'n traject niet.</li>
+          <li>Heb je acute juridische bijstand nodig? Daarvoor verwijs ik je door naar een advocaat binnen mijn netwerk.</li>
+          <li>Zoek je alleen een luisterend oor om te ventileren of te klagen? Belpearl werkt het beste als je zelf met eigenaarschap en de wil om verder te komen aan het gesprek begint.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Veelgestelde vragen</p>
+        <h2>Nog iets onduidelijk?</h2>
+      </div>
+      <div class="faq-list">
+
+        <details>
+          <summary>Hoe werkt het boeken van een consult?<span class="plus">+</span></summary>
+          <p>Je kiest een consult (20, 35 of 55 minuten), plant zelf een moment in via de agenda en betaalt vooraf veilig via iDEAL. Zodra je hebt geboekt en betaald, is je plek bevestigd en ontvang je het telefoonnummer waarop je gebeld wordt.</p>
+        </details>
+
+        <details>
+          <summary>Kan ik ook dezelfde dag nog een consult inplannen?<span class="plus">+</span></summary>
+          <p>Ja, dat kan. Voor een consult op dezelfde dag geldt een spoedtoeslag van €20 bovenop het basistarief.</p>
+        </details>
+
+        <details>
+          <summary>Moet ik per se bellen, of kan het ook anders?<span class="plus">+</span></summary>
+          <p>Bellen is de standaard, maar als je liever niet belt kan het gesprek ook via e-mail of spraakbericht.</p>
+        </details>
+
+        <details>
+          <summary>Welk consult past bij mij?<span class="plus">+</span></summary>
+          <p>Twijfel je? Begin gerust met het 20 min consult. Merk je tijdens of na het gesprek dat je meer tijd nodig hebt, dan kun je altijd een langer consult inplannen.</p>
+        </details>
+
+        <details>
+          <summary>Is een consult vertrouwelijk?<span class="plus">+</span></summary>
+          <p>Ja. Wat je met mij bespreekt, blijft tussen ons.</p>
+        </details>
+
+        <details>
+          <summary>Ga je mijn zaak juridisch behandelen?<span class="plus">+</span></summary>
+          <p>Ik ben juridisch onderlegd en denk vanuit die kennis met je mee, maar ik neem geen juridische procedures over. Waar dat nodig is, verwijs ik je door binnen mijn grote, warme netwerk — zodat ik je zeker weet te koppelen aan de juiste persoon voor jouw situatie.</p>
+        </details>
+
+        <details>
+          <summary>Kan ik een consult annuleren of verzetten?<span class="plus">+</span></summary>
+          <p>Een consult verzetten kan de eerste keer altijd kosteloos. Bij annulering vindt geen restitutie plaats.</p>
+        </details>
+
+        <details>
+          <summary>Kan ik een consult boeken over een melding bij Veilig Thuis?<span class="plus">+</span></summary>
+          <p>Ja. Dit is een van de onderwerpen waar je bij Belpearl terecht kunt, bijvoorbeeld met vragen over wat een melding voor jou betekent of wat je te doen staat.</p>
+        </details>
+
+        <details>
+          <summary>Is dit hetzelfde als therapie of een mediationtraject?<span class="plus">+</span></summary>
+          <p>Nee. Belpearl is bedoeld voor een kort, gericht gesprek — geen langdurig traject. Past jouw situatie beter bij een uitgebreider traject, dan bespreken we dat samen tijdens het consult.</p>
+        </details>
+
+        <details>
+          <summary>Kan ik Belpearl bellen in een noodsituatie?<span class="plus">+</span></summary>
+          <p>Nee, Belpearl is niet bedoeld voor acute noodsituaties. Bij direct gevaar bel je 112.</p>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING CTA -->
+  <section class="closing">
+    <div class="wrap">
+      <h2>Klaar om te bellen?</h2>
+      <p>Je hoeft niet alles alleen uit te zoeken.</p>
+      <a class="btn" href="https://calendly.com/belpearl">Plan direct je consult</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> Belpearl — Pearl Numoh</span>
+    <span>pearlnumoh@hotmail.com</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const toggle = document.getElementById('menuToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    links.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+</script>
+
+</body>
+</html>
